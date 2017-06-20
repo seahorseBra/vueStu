@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue</title>
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="vuetest.css">
+
+    <style type="text/css">
+        #app {
+            background-color: brown;
+        }
+    </style>
+
+    <script>
+        Vue.component('todo-item', {
+            props: ["todo"],
+            template: '<li>{{todo}}</li>'
+        })
+    </script>
+</head>
+<body>
+<div id="app">
+    <p @click="show">"{{messa | nn | cut(6)}}"</p>
+    <p>"{{remsg1}}"</p>
+</div>
+
+<a :href="http://www.baidu.com">百度</a>
+<div id="app1">
+    <h1>{{m1}}</h1>
+    <input v-model="question">
+    <li v-for="a in as">{{a.text}}</li>
+    <todo-item v-for="a in as" :todo="dd"></todo-item>
+</div>
+
+<div id="app3">
+    <div :class="classobj">class对象切换</div>
+    <div :style="[baseStyle]">内联样式</div>
+</div>
+
+<div id="app4">
+    <div>
+        <input v-model="choice">
+        <h1 v-if="type === '1'">YES</h1>
+        <h1 v-else-if="type === '2'">awegaweg</h1>
+        <h1 v-else>NO</h1>
+    </div>
+</div>
+
+<div id="app5">
+    <input v-model="steps">
+    <h1>{{title}}</h1>
+    <num-sum :step="step1"></num-sum>
+    <num-sum step=3 v-on:plus="iii"></num-sum>
+    <num-sum step=4></num-sum>
+</div>
+<script>
+    var v2
+    var v1 = new Vue({
+        el: '#app',
+        data: {
+            messa: "wregoaiwhego"
+        },
+        filters: {
+            nn: function (value) {
+                if (!value) return ''
+                value = value.toString()
+                return value.charAt(0).toUpperCase() + value.slice(1) + "啊呜额规划为g"
+            },
+            cut: function (value, len) {
+                if (!value)return ''
+                value = value.toString()
+                return value.substr(0, len)
+            }
+        },
+        computed: {
+            remsg1: function () {
+                return this.messa.split('').reverse().join('')
+            }
+        },
+        methods: {
+            show: function () {
+                this.messa = v2.dd
+            }
+        },
+        created: function () {
+            console.log("on created")
+        },
+        mounted: function () {
+            console.log("on mounted")
+        },
+        updated: function () {
+            console.log("on updated")
+        },
+        destroyed: function () {
+            console.log("on destroyed")
+        }
+    })
+
+    //    v1.$mount("#app")
+
+    v2 = new Vue({
+        el: '#app1',
+        data: {
+            m1: "we",
+            question: '',
+            as: [
+                {text: "auihewgaw"},
+                {text: "阿和g"},
+                {text: "为了更好"}
+            ],
+            dd: "无公害埃尔文改好呢规划为干eg"
+        },
+        watch: {
+            question: function () {
+                console.log(this.m1 + "|" + this.question.toString())
+                this.m1 = this.question.toString()
+            }
+        }
+    })
+
+    var v3 = new Vue({
+        el: '#app3',
+        data: {
+            classobj: {
+                active: true,
+                'text-danger': true
+            },
+            baseStyle: {
+                color: 'red'
+            }
+        }
+    })
+
+    var v4 = new Vue({
+        el: '#app4',
+        data: {
+            choice: 1,
+            type: 1
+        },
+        watch: {
+            choice: function () {
+                this.type = this.choice
+            }
+        }
+    })
+
+    Vue.component('num-sum', {
+        props: {
+            step:{
+//                type:Number,
+//                validator:function (value) {
+//                    return value<10
+//                }
+            },
+//            sss:{
+//                type:Number,
+//                validator:function (value) {
+//                    return value<10
+//                }
+//            }
+        },
+        template: '<button v-on:click="plus">{{num}} + {{step}}</button>',
+        data: function () {
+            return {
+                num: 0,
+            }
+        },
+        methods: {
+            plus: function () {
+                console.log(this.step.type)
+                var nu = parseInt(this.num)
+                this.num = nu + parseInt(this.step)
+                this.$emit('plus', this.num)
+            }
+        }
+    })
+
+    new Vue({
+        el: "#app5",
+        data:{
+            steps:0,
+            step1:0,
+            title:0
+        },
+        watch:{
+            steps:function () {
+                console.log(this.step1.type + "|" + this.steps.type)
+                this.step1 = this.steps
+                console.log(this.step1.type + "|" + this.steps.type)
+            }
+        },
+        methods:{
+            iii:function (value) {
+                console.log(value)
+                this.title = value
+            }
+        }
+    })
+</script>
+</body>
+</html>

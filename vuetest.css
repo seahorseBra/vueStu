@@ -1,0 +1,15 @@
+.active{
+    color: #00f807;
+}
+.text-danger{
+    border: #da0017 solid 2px;
+}
+
+.red-font{
+    color: red;
+}
+
+.border-one{
+    border: #00f807 solid 1px;
+}
+

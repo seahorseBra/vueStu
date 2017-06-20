@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="vuetest.css">
+    <script src="vue.js"></script>
+</head>
+<body id="bb">
+<div id="root">
+    <h1 v-for="item in items">{{item}}</h1>
+    <button @keyup.alt.enter="wn('Form cannot be submitted yet.', $event)">点点</button>
+    </br>
+    <input type="checkbox"
+           id="checkbox"
+           v-model="toggle">
+    <label for="checkbox">{{ toggle }}</label>
+
+    <div>
+        <input type="radio" id="one" value="one" v-model="picked">
+        <label for="one">one</label>
+        <input type="radio" id="two" value="two" v-model="picked">
+        <label for="two">two</label>
+        <span>picked:{{picked}}</span>
+    </div>
+
+    <div>
+        <select v-model="selected" multiple>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <span>{{selected}}</span>
+    </div>
+</div>
+
+<script>
+    var vm = new Vue({
+        el: '#root',
+        data: {
+            itemss: [1, 5, 23],
+            toggle: '',
+            picked: '',
+            selected: []
+        },
+        computed: {
+            items: function () {
+                return this.itemss.reverse()
+            }
+        },
+        methods: {
+            wn: function (message, event) {
+                if (event) event.preventDefault()
+                alert(message)
+            }
+        }
+
+    })
+</script>
+</body>
+</html>

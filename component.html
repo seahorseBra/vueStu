@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component学习</title>
+    <script src="vue.js"></script>
+
+</head>
+<body>
+<div id="da">
+    <my-component :message="me" @up="update" @click.native="showalert"></my-component>
+    <input-component @ups="con">
+        <span>父组件替换</span>
+    </input-component>
+</div>
+</body>
+<script type="text/javascript">
+    Vue.component('my-component', {
+        props: {
+            message: {
+                type: Number
+            }
+        },
+        template: '<div><h1 v-on:click="updateMessage">{{me}}</h1>\
+        <h1>温哥华</h1></div>\
+        ',
+        data: function () {
+            return {
+                me: this.message
+            }
+        },
+        methods: {
+            updateMessage: function () {
+                this.me = 6
+                this.$emit('up')
+//                console.log(this.$el.textContent)
+//                this.nextTick(
+//                    console.log(this.$el.textContent)
+//                )
+            }
+        }
+    })
+
+    Vue.component('input-component', {
+        template: '<span>姓名\
+        <input\
+        ref="input" \
+        @input="updateValue($event.target.value)">\
+        <slot>父组件没内容</slot>\
+        </span>\
+        ',
+        methods: {
+            updateValue:function (value) {
+                var formatValue = value.trim()
+                    .substr(0,1).toUpperCase() + value.substr(1,value.length)
+                this.$refs.input.value = formatValue
+                this.$emit('ups')
+            },
+        }
+    })
+    var vm = new Vue({
+        el: '#da',
+        data: {
+            me: 4
+        },
+        methods: {
+            update: function () {
+                alert("狗窝g")
+            },
+            showalert: function () {
+                alert('围攻weg')
+            },
+            con:function () {
+                console.log('aiwehgaweghaewgffaewg')
+            }
+        }
+    })
+
+</script>
+</html>
