@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.2.1.js"></script>
+    <style>
+        .picker {
+            overflow: hidden;
+            width: 306px;
+            height: 250px;
+            background: rgb(232, 231, 227);
+            border: #7e7e7d solid 1px;
+        }
+
+        .lie {
+            text-align: center;
+            width: 100px;
+            height: 100%;
+            border-left: #7e7e7d solid 1px;
+            float: left;
+        }
+
+        .lie.first {
+            border-left: none;
+        }
+
+        .lieitem {
+            text-align: center;
+            text-decoration: none;
+            list-style-type: none;
+            margin: 1px auto;
+            background: #9d9d9d;
+            position: absolute;
+        }
+
+        .item {
+            height: 40px;
+            border: #6a6a6a solid 1px;
+            margin: 2px auto;
+        }
+    </style>
+</head>
+<body>
+<div style="height: 100px;background-color: #00f807"></div>
+<div class="picker">
+    <div class="lie first">
+        <ul id="lie1" class="lieitem">
+            <li class="item">aaaweg</li>
+            <li class="item">aaaweg</li>
+            <li class="item">aaaweg</li>
+            <li class="item">aaaweg</li>
+            <li class="item">aaaweg</li>
+            <li class="item">aaaweg</li>
+        </ul>
+    </div>
+    <div class="lie"></div>
+    <div class="lie"></div>
+</div>
+<h1 id="aa">aaaaa</h1>
+</body>
+
+<script>
+    $(document).ready(function () {
+        $("#aa").click(function () {
+            var aa = $("#aa")
+            aa.text("aweh")
+        })
+    })
+
+    var isDown = false
+    var lastPosition = [0,0]
+    $("#lie1").mousedown(function (e) {
+        isDown = true
+        lastPosition[0] = e.pageX
+        lastPosition[1] = e.pageY
+    })
+    $("#lie1").mouseup(function (e) {
+        isDown = false
+    })
+    $("#lie1").mousemove(function (e) {
+        if(isDown){
+            console.log("mousemove", e.pageY)
+//            moveView(this, 0, e.pageY - lastPosition[1])
+            $("#lie1").css({'top':(e.pageY - lastPosition[1])+'px'})
+            lastPosition[1] = e.pageY
+        }
+    })
+
+    function moveView(view, x, y) {
+        $("#lie1").css({'top':y+'px'})
+    }
+</script>
+</html>

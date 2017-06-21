@@ -81,13 +81,16 @@
         methods: {
             show: function () {
                 this.messa = v2.dd
+            },
+            logconsol:function () {
+                console.log("我改好啊围攻啊围攻")
             }
         },
         created: function () {
             console.log("on created")
         },
         mounted: function () {
-            console.log("on mounted")
+            this.logconsol()
         },
         updated: function () {
             console.log("on updated")

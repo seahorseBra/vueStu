@@ -5,13 +5,46 @@
     <title>Component学习</title>
     <script src="vue.js"></script>
 
+    <style type="text/css">
+        .fade-enter-active{
+            transition: all .8s ease;
+        }
+        .fade-leave-active  {
+            /*opacity: 0;*/
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .fade-enter, .fade-leave-active{
+            transform: translateX(10px);
+            opacity: 0;
+        }
+    </style>
+
 </head>
 <body>
 <div id="da">
     <my-component :message="me" @up="update" @click.native="showalert"></my-component>
     <input-component @ups="con">
         <span>父组件替换</span>
+        <span slot="header">父header</span>
     </input-component>
+    <props-component>
+        <template scope="props">
+            <h1>{{props.text}}</h1>
+        </template>
+    </props-component>
+
+    <transition name="fade">
+        <list-component :show="isShow">
+            <template scope="props">
+                <li style="color: brown">{{props.text}}</li>
+            </template>
+        </list-component>
+    </transition>
+
+    <component :is="currentComponent"></component>
+
+    <async-example></async-example>
+    <button id="btn" @click="toggleTemp">切换</button>
 </div>
 </body>
 <script type="text/javascript">
@@ -47,21 +80,93 @@
         ref="input" \
         @input="updateValue($event.target.value)">\
         <slot>父组件没内容</slot>\
+            <slot name="header"></slot>\
         </span>\
         ',
         methods: {
-            updateValue:function (value) {
+            updateValue: function (value) {
                 var formatValue = value.trim()
-                    .substr(0,1).toUpperCase() + value.substr(1,value.length)
+                        .substr(0, 1).toUpperCase() + value.substr(1, value.length)
                 this.$refs.input.value = formatValue
                 this.$emit('ups')
             },
         }
     })
+
+    Vue.component('props-component', {
+        template: '\
+        <div>\
+        <slot :text="tex"></slot>\
+        </div>\
+        ',
+        data: function () {
+            return {
+                tex: 'iajwego',
+                items: [
+                    {text: '为根据1'},
+                    {text: '为根据2'},
+                    {text: '为根据3'},
+                    {text: '为根据4'}
+                ]
+            }
+        }
+    })
+
+    Vue.component('list-component', {
+        props: {
+            show: Boolean
+        },
+        data: function () {
+            return {
+                items: [
+                    {text: '文革1'},
+                    {text: '文革2'},
+                    {text: '文革3'},
+                    {text: '文革4'},
+                    {text: '文革5'}
+                ]
+            }
+        },
+        template: '\
+            <ul v-if="show">\
+                <slot v-for="item in items" :text="item.text"></slot>\
+            </ul>\
+            ',
+        compute: {},
+        methods: {
+            update: function () {
+                this.$nextTick(function () {
+                    console.log('aewghaoewg')
+                })
+            }
+
+        },
+//        mounted:function () {
+//            this.$nextTick(function () {
+//                console.log("aweogji啊围攻")
+//            })
+//        }
+    })
+
+    Vue.component('async-example', function (resolve, reject) {
+        setTimeout(function () {
+            resolve({
+                template: '<div>I am async!</div>',
+                mounted: function () {
+                    this.$nextTick(function () {
+                        console.log("aweogji啊围攻")
+                    })
+                }
+            })
+        }, 2000)
+    })
+
     var vm = new Vue({
         el: '#da',
         data: {
-            me: 4
+            me: 4,
+            currentComponent: 'my-component',
+            isShow: true
         },
         methods: {
             update: function () {
@@ -70,8 +175,11 @@
             showalert: function () {
                 alert('围攻weg')
             },
-            con:function () {
+            con: function () {
                 console.log('aiwehgaweghaewgffaewg')
+            },
+            toggleTemp: function () {
+                this.isShow = !this.isShow
             }
         }
     })
